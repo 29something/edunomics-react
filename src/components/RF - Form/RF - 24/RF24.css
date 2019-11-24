@@ -1,0 +1,21 @@
+.text-input {
+  width: 6rem !important;
+}
+.wc-input {
+  width: 5rem !important;
+}
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.table td,
+.table th {
+  padding: 0.6rem !important;
+  vertical-align: top;
+}
+
+.table thead th {
+  vertical-align: bottom;
+}

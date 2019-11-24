@@ -1,0 +1,1607 @@
+import React, { Component } from 'react'
+import { Link, Redirect, withRouter, NavLink } from "react-router-dom";
+import "../../Test/Test.css";
+import axios from "axios";
+import authService from "../../../services/auth-service";
+import axiosService from "../../../services/axios-service";
+import { API_URL } from "../../../services/url";
+import SimpleReactValidator from "simple-react-validator";
+import { SuccessModal } from '../../Test/SuccessModal';
+export class RF21 extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          type: "RF_21",
+          btnstatus:false,
+          amount_status : false,
+         plant : "",
+         grade_21 : "",
+         mix_code  :"",
+         cementitious_content : "",
+         cement_content :  "",
+         admixture_name : "",
+         ad_mixture  :"",
+         batch_time : "",
+         cement_details : "",
+         time1 : "",time2 : "",time3 : "",time4: "",time5 : "",time6 : "",time7 : "",time8 : "",time9 : "",time10 : "",time11 : "",time12 : "",time13 : "",
+         nd1 : "",nd2 : "",nd3 : "",nd4 : "", nd5 : "", nd6 : "",nd7 : "", nd8 : "", nd9 : "",nd10 : "", nd11 : "", nd12 :  "", nd13 : "",
+         al1 : "", al2 : "",al3 : "",al4 : "",al5 : "",al6 : "", al7 : "", al8 :  "",al9 : "", al10: "", al11 : "",al12 : "",aL13 : "",
+         na1 : "",na2 : "",na3 : "",na4 : "",na5 : "",na6 : "",na7 : "", na8 : "",na9 : "", na10 : "",na11 : "",na12 : "",na13 : "",
+         pr1 : "",pr2 : "",pr3 : "",pr4 : "",pr5 : "",pr6 : "", pr7 : "",pr8 : "",pr9 : "",pr10: "", pr11 : "",pr12 : "",pr13 : "",
+         remark1 : "",remark2 : "",remark3 : "",remark4 : "",remark5 : "",remark6 : "",ramerk7 : "",remark8 : "",remark9 : "",remark10 : "",remark11 : "",remark12 : "",remark13 : "",
+         date_1 : ""
+
+        };
+        this.onSubmit = this.onSubmit.bind(this);
+        this.validator = new SimpleReactValidator();
+      }
+      componentWillMount = () => {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+    
+        if (dd < 10) {
+          dd = "0" + dd;
+        }
+    
+        if (mm < 10) {
+          mm = "0" + mm;
+        }
+    
+        today = mm + "/" + dd + "/" + yyyy;
+        console.log("date here", today);
+        this.state.date = today;
+        console.log(this.state.date);
+        console.log("params jere", this.props.match.url);
+      };
+      openModal() {
+        this.setState({
+            visible : true
+        });
+    }
+    
+      closeModal() {
+        this.setState({
+            visible : false
+        });
+      }
+    
+      change = e => {
+        this.setState({
+          [e.target.name]: e.target.value,
+          amount_status : true
+
+        });
+      };
+      getWebsite = () => {
+        fetch("/").then(console.log(this.state));
+      };
+      async onSubmit(event) {
+        event.preventDefault();
+        console.log(this.state);
+        if (this.validator.allValid()) {
+          let tokenvalue = localStorage.getItem("token");
+          let body = {
+            new_average_yield_value : this.state.new_average_yield_value,
+            new_average_density_concrete  : this.state.new_average_density_concrete,
+            supplier: this.state.supplier,
+            source: this.state.source,
+            sample_location: this.state.sample_location,
+            w_b1 : this.state.w_b1,
+            w_b2 : this.state.w_b2,
+            w_b3 : this.state.w_b3,
+            v_c1 : this.state.v_c1,
+            v_c2 : this.state.v_c2,
+            v_c3 : this.state.v_c3,
+            total_batch_density1 : this.state.total_batch_density1,
+            total_batch_density2 : this.state.total_batch_density2,
+            total_batch_density3 : this.state.total_batch_density3,
+            batch1 : this.state.batch1,
+            batch2 : this.state.batch2,
+            batch3 : this.state.batch3,
+            weight: this.state.weight,
+            agg_type: this.state.agg_type,
+            weight_balance: this.state.weight_balance,
+            weight_of_water: this.state.weight_of_water,
+            density_agreegate3 : this.state.density_agreegate3,
+            density_agreegate1: this.state.density_agreegate1,
+            density_agreegate2: this.state.density_agreegate2,
+            weight_of_agreegate1: this.state.weight_of_agreegate1,
+            weight_of_aggregate2: this.state.weight_of_aggregate2,
+            weight_of_agreegate3 : this.state.weight_of_agreegate3,
+            weight_of_concrete1 : this.state.weight_of_concrete1,
+            weight_of_concrete2  : this.state.weight_of_concrete2,
+            weight_of_concrete3 : this.state.weight_of_concrete3,
+            pto_comment: this.state.pto_comment,
+            plant: localStorage.getItem("plant_name"),
+            date: this.state.date,
+            type: "RF_21",
+            s_y2 : this.state.s_y2,
+            s_y3 : this.state.s_y3,
+            s_y5 : this.state.s_y5,
+            s_t1: this.state.s_t1,
+            s_t2: this.state.s_t2,
+            s_t3: this.state.s_t3,
+            total_yield3 : this.state.total_yield3,
+            total_yield1 : this.state.total_yield1,
+            total_yield2 : this.state.total_yield2
+          };
+          console.log(body);
+          this.openModal();
+          this.setState({
+            btnstatus : true
+          })
+          try {
+            const response = await axios.post(
+              `${API_URL}rf_form/submit`,
+              this.state,
+              (axios.defaults.headers.common["x-access-token"] = tokenvalue)
+            );
+            console.log(response);
+            //   .then(console.log(this.state));
+    
+            if (response.data==='success') {
+              // alert(response.data.msg);
+              this.props.history.push("/TableRf21");
+            } else {
+              alert(response.data.msg);
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        } else {
+          this.validator.showMessages();
+          // rerender to show messages for the first time
+          this.forceUpdate();
+        }
+      }
+      totalshow = e => {
+        e.preventDefault();
+        // this.setState({
+        //   amount_status: true,
+          
+        // });
+        let ndvariable1 = Math.pow(this.state.nd1, 2)
+        console.log(ndvariable1)
+        console.log('something')
+        let neddleare1 = (3.14*ndvariable1) / 4
+        this.state.na1 = neddleare1
+        console.log(this.state.na1)
+
+       this.state.pr1 = +this.state.al1 / +this.state.na1
+        console.log('persiste', this.state.pr1)
+        
+        
+      };
+    
+      render() {
+             // let showmodal;
+     let sbmtbtn, btnmsg;
+     if(this.state.visible)
+     {
+       // showmodal = (
+       //   <div>
+       //     <SuccessModal  
+       //          visible={this.state.visible}
+       //               width={this.props.width}
+       //               height={this.props.height}
+       //               effect={this.props.effect}
+       //               onClickAway={() => this.closeModal()} />
+       //   </div>
+       // )
+     }
+     if(this.state.btnstatus)
+     {
+       sbmtbtn = (
+         <button
+         class="btn btn-primary"
+         onClick={this.onSubmit.bind(this)}
+         disabled
+       >
+         Submit
+       </button>
+       )
+       btnmsg = (
+         <div>
+         <hr />
+         <p>Your Form Has Already Been Submitted.Please Don't Click SUMBIT Button AGAIN!!</p>
+         </div>
+       )
+     }
+     else
+     {
+       sbmtbtn=(
+         <button
+         class="btn btn-primary"
+         onClick={this.onSubmit.bind(this)}
+       >
+         Submit
+       </button>
+       )
+     }
+        if(this.state.amount_status)
+        {
+          let ndvariable1 = Math.pow(this.state.nd1, 2)
+          this.state.na1 = (3.14*ndvariable1) / 4
+          this.state.pr1 = +this.state.al1 / +this.state.na1
+          
+          //for NA2
+          let ndvariable2 = Math.pow(this.state.nd2, 2)
+          this.state.na2 = (3.14*ndvariable2) / 4
+          this.state.pr2 = +this.state.al2 / +this.state.na2
+          
+           //for NA3
+           let ndvariable3 = Math.pow(this.state.nd3, 2)
+           this.state.na3 = (3.14*ndvariable3) / 4
+           this.state.pr3 = +this.state.al3 / +this.state.na3
+
+            //for NA4
+          let ndvariable4 = Math.pow(this.state.nd4, 2)
+          this.state.na4 = (3.14*ndvariable4) / 4
+          this.state.pr4 = +this.state.al4 / +this.state.na4
+
+           //for NA5
+           let ndvariable5 = Math.pow(this.state.nd5, 2)
+           this.state.na5 = (3.14*ndvariable5) / 4
+           this.state.pr5 = +this.state.al5 / +this.state.na5
+
+            //for NA6
+          let ndvariable6 = Math.pow(this.state.nd6, 2)
+          this.state.na6 = (3.14*ndvariable6) / 4
+          this.state.pr6 = +this.state.al6 / +this.state.na6
+
+           //for NA7
+           let ndvariable7 = Math.pow(this.state.nd7, 2)
+           this.state.na7 = (3.14*ndvariable7) / 4
+           this.state.pr7 = +this.state.al7 / +this.state.na7
+
+            //for NA8
+          let ndvariable8 = Math.pow(this.state.nd8, 2)
+          this.state.na8 = (3.14*ndvariable8) / 4
+          this.state.pr8 = +this.state.al8 / +this.state.na8
+
+           //for NA9
+           let ndvariable9 = Math.pow(this.state.nd9, 2)
+           this.state.na9 = (3.14*ndvariable9) / 4
+           this.state.pr9 = +this.state.al9 / +this.state.na9
+
+            //for NA10
+          let ndvariable10 = Math.pow(this.state.nd10, 2)
+          this.state.na10 = (3.14*ndvariable10) / 4
+          this.state.pr10 = +this.state.al10 / +this.state.na10
+
+           //for NA11
+           let ndvariable11 = Math.pow(this.state.nd11, 2)
+           this.state.na11 = (3.14*ndvariable11) / 4
+           this.state.pr11 = +this.state.al11 / +this.state.na11
+
+            //for NA12
+          let ndvariable12 = Math.pow(this.state.nd12, 2)
+          this.state.na12 = (3.14*ndvariable12) / 4
+          this.state.pr12 = +this.state.al12 / +this.state.na12
+
+           //for NA13
+           let ndvariable13 = Math.pow(this.state.nd13, 2)
+           this.state.na13 = (3.14*ndvariable13) / 4
+           this.state.pr13 = +this.state.al13 / +this.state.na13
+        }
+        let buttontext;
+        if (this.props.match.url == "/BulkDensity") {
+          buttontext = (
+            <span
+              style={{
+                fontWeight: "bold",
+                fontStyle: "italic",
+                color: "forestgreen"
+              }}
+            >
+              Bulk Denstiy
+            </span>
+          );
+        }
+        let display_total_amount;
+        if (this.state.amount_status == true) {
+          display_total_amount = <div>{this.state.total} %</div>;
+        } else {
+          display_total_amount = (
+            <div>
+              <p>Enter The Above Fields</p>
+            </div>
+          );
+        }
+    
+        return (
+          <div className="skin-blue fixed-layout">
+            <div className="page-wrapper">
+              <div className="container-fluid">
+                <div className="row page-titles">
+                  <div className="col-md-5 align-self-center">
+                    {/* <h4 className="text-themecolor">Forms</h4> */}
+                    <nav aria-label="breadcrumb">
+                      <ol class="breadcrumb">
+                        <li className="breadcrumb-item">
+                          <Link to={process.env.PUBLIC_URL + "/"}>Home</Link>
+                        </li>
+                        <li className="breadcrumb-item active" aria-current="page">
+                        RF - 21
+                        </li>
+                      </ol>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+    
+              {/*Form content begin */}
+    
+              <div className="product-form-upper">
+                <div className="container-fluid">
+                  <div className="below-custom-form">
+                    <div className="row">
+                      <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        {/* <div className="custom-btn-lists">
+                          <ul>
+                            <li>
+                              <button className="btn btn-info">
+                                <NavLink
+                                  activeClassName="selected"
+                                  to={process.env.PUBLIC_URL + "/ParticleSize"}
+                                >
+                                  Particle Size
+                                </NavLink>
+                              </button>
+                            </li>
+                            <li>
+                              <button className="btn btn-info">
+                                <NavLink
+                                  activeClassName="selected"
+                                  to={process.env.PUBLIC_URL + "/ViewTestEight"}
+                                >
+                                  Flakiness Index
+                                </NavLink>
+                              </button>
+                            </li>
+                            <li>
+                              <button className="btn btn-info">
+                                <NavLink
+                                  activeClassName="selected"
+                                  to={process.env.PUBLIC_URL + "/ViewTestSeven"}
+                                >
+                                  Elongation Index
+                                </NavLink>
+                              </button>
+                            </li>
+                            <li>
+                              <button className="btn btn-info">
+                                <NavLink
+                                  activeClassName="selected"
+                                  to={process.env.PUBLIC_URL + "/ViewTestOne"}
+                                >
+                                  Slit Content
+                                </NavLink>
+                              </button>
+                            </li>
+                            <li>
+                              <button className="btn btn-info">
+                                <NavLink
+                                  activeClassName="selected"
+                                  to={process.env.PUBLIC_URL + "/ViewTestTwo"}
+                                >
+                                  Gravity and Water abs
+                                </NavLink>
+                              </button>
+                            </li>
+                            <li>
+                              <button className="btn btn-info">
+                                <NavLink
+                                  activeClassName="selected"
+                                  to={process.env.PUBLIC_URL + "/ViewTestThree"}
+                                >
+                                  Surface Moisture
+                                </NavLink>
+                              </button>
+                            </li>
+                            <li>
+                              <button className="btn btn-info">
+                                <NavLink
+                                  activeClassName="selected"
+                                  to={process.env.PUBLIC_URL + "/ViewTestFour"}
+                                >
+                                  Compaction
+                                </NavLink>
+                              </button>
+                            </li>
+                            <li>
+                              <button className="btn btn-info">
+                                <NavLink
+                                  activeClassName="selected"
+                                  to={process.env.PUBLIC_URL + "/ViewTestFive"}
+                                >
+                                  Crushing
+                                </NavLink>
+                              </button>
+                            </li>
+                            <li>
+                              <button className="btn btn-info">
+                                <NavLink
+                                  activeClassName="selected"
+                                  to={process.env.PUBLIC_URL + "/ViewTestSix"}
+                                >
+                                  {buttontext}
+                                </NavLink>
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+    
+                        <hr /> */}
+                      </div>
+    
+                      <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <p style={{ textAlign: "center" }}>
+                        <h3>RF - 21</h3>
+                        Determination of Setting time of concrete   IS : 8142 - 1963 
+                        </p>
+                        <hr />
+                      </div>
+                    </div>
+                    <form className="custom-content-form">
+                      <div className="form-row">
+                        <div class="form-group col-md-6">
+                          <div class="form-group row">
+                            <label
+                              for="inputPassword"
+                              class="col-sm-2 col-form-label"
+                            >
+                            Plant
+                            </label>
+                            <div class="col-sm-10">
+                            {localStorage.getItem('plant_name')}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <div class="form-group row">
+                            <label
+                              for="inputPassword"
+                              class="col-sm-2 col-form-label"
+                            >
+                              date
+                            </label>
+                            <div class="col-sm-10">{this.state.date}</div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <div class="form-group row">
+                            <label
+                              for="inputPassword"
+                              class="col-sm-2 col-form-label"
+                            >
+                              Mix Code
+                            </label>
+                            <div class="col-sm-10">
+                              <input
+                                list="browsers"
+                                name="mix_code"
+                                value={this.state.mix_code}
+                                onChange={e => this.change(e)}
+                                className="form-control"
+                              />
+                              
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <div class="form-group row">
+                            <label
+                              for="inputPassword"
+                              class="col-sm-2 col-form-label"
+                            >
+                              Grade
+                            </label>
+                            <div class="col-sm-10">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="inputPassword"
+                                name="grade_21"
+                                value={this.state.grade_21}
+                                onChange={e => this.change(e)}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <div class="form-group row">
+                            <label
+                              for="inputPassword"
+                              class="col-sm-2 col-form-label"
+                            >
+                              Cementitious content 
+                            </label>
+                            <div class="col-sm-10">
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="inputPassword"
+                                name="cementitious_content"
+                                value={this.state.cementitious_content}
+                                onChange={e => this.change(e)}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <div class="form-group row">
+                            <label
+                              for="inputSubcategory"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Cement content 
+                            </label>
+                            <div class="col-sm-10">
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="inputPassword"
+                                name="cement_content"
+                                value={this.state.cement_content}
+                                onChange={e => this.change(e)}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <div class="form-group row">
+                            <label
+                              for="inputPassword"
+                              class="col-sm-3 col-form-label"
+                            >
+                           Admixture dosage 
+                            </label>
+                            <div class="col-sm-9">
+                       
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="inputPassword"
+                                name="ad_mixture"
+                                value={this.state.ad_mixture}
+                                onChange={e => this.change(e)}
+                              />
+                           
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <div class="form-group row">
+                            <label
+                              for="inputPassword"
+                              class="col-sm-3 col-form-label"
+                            >
+                              Admixture name 
+                            </label>
+                            <div class="col-sm-9">
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="inputPassword"
+                                name="admixture_name"
+                                value={this.state.admixture_name}
+                                onChange={e => this.change(e)}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <div class="form-group row">
+                            <label
+                              for="inputPassword"
+                              class="col-sm-3 col-form-label"
+                            >
+                              Batching Time
+                            </label>
+                            <div class="col-sm-9">
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="inputPassword"
+                                name="batch_time"
+                                value={this.state.batch_time}
+                                onChange={e => this.change(e)}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <div class="form-group row">
+                            <label
+                              for="inputPassword"
+                              class="col-sm-3 col-form-label"
+                            >
+                              Cement Details
+                            </label>
+                            <div class="col-sm-9">
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="inputPassword"
+                                name="cement_details"
+                                value={this.state.cement_details}
+                                onChange={e => this.change(e)}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                    </form>
+                  </div>
+                  {/*etst detial form */}
+                  <div className="below-custom-form">
+                    <div className="row">
+                      <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <h3>Test Details</h3>
+                        <hr />
+                        <br />
+                      </div>
+                    
+                    </div>
+                    <form className="custom-content-form">
+                      <div className="form-row">
+                        <div class="form-group col-md-12">
+                          <table class="table table-bordered">
+                            <thead class="thead-light">
+                              <tr>
+                                <th scope="col">S.No.</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th scope="col">Needle Diameter (mm)</th>
+                                <th scope="col">Applied Load (mm) L</th>
+                                <th scope="col">Needle Area (mm) A</th>
+                                <th scope="col">Penetration Resistance (p = L / A)</th>
+                                <th scope="col">Remarks</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <th scope="row">
+                                1
+                                </th>
+                                <th><input
+                                    type="date"
+                                    className="form-control"
+                                    name="date_1"
+                                    value={this.state.date_1}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <th><input
+                                    type="time"
+                                    className="form-control"
+                                    name="time1"
+                                    value={this.state.time1}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="nd1"
+                                    value={this.state.nd1}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="al1"
+                                    value={this.state.al1}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                 { <input
+                                    type="text"
+                                    className="form-control"
+                                    name="na1"
+                                    value={this.state.na1}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />}
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="pr1"
+                                    value={this.state.pr1}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="remark1"
+                                    value={this.state.remark1}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row">
+                                2
+                                </th>
+                                <th><input
+                                    type="date"
+                                    className="form-control"
+                                    name="date_1"
+                                    value={this.state.date_1}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <th><input
+                                    type="time"
+                                    className="form-control"
+                                    name="time2"
+                                    value={this.state.time2}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="nd2"
+                                    value={this.state.nd2}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="al2"
+                                    value={this.state.al2}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="na2"
+                                    value={this.state.na2}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="pr2"
+                                    value={this.state.pr2}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="remark2"
+                                    value={this.state.remark2}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row">
+                                3
+                                </th>
+                                <th><input
+                                    type="date"
+                                    className="form-control"
+                                    name="date_1"
+                                    value={this.state.date_1}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <th><input
+                                    type="time"
+                                    className="form-control"
+                                    name="time3"
+                                    value={this.state.time3}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="nd3"
+                                    value={this.state.nd3}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="al3"
+                                    value={this.state.al3}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="na3"
+                                    value={this.state.na3}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="pr3"
+                                    value={this.state.pr3}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="remark3"
+                                    value={this.state.remark3}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row">
+                                4
+                                </th>
+                                <th><input
+                                    type="date"
+                                    className="form-control"
+                                    name="date_1"
+                                    value={this.state.date_1}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <th><input
+                                    type="time"
+                                    className="form-control"
+                                    name="time4"
+                                    value={this.state.time4}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="nd4"
+                                    value={this.state.nd4}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="al4"
+                                    value={this.state.al4}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="na4"
+                                    value={this.state.na4}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="pr4"
+                                    value={this.state.pr4}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="remark4"
+                                    value={this.state.remark4}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row">
+                                5
+                                </th>
+                                <th><input
+                                    type="date"
+                                    className="form-control"
+                                    name="date_1"
+                                    value={this.state.date_1}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <th><input
+                                    type="time"
+                                    className="form-control"
+                                    name="time5"
+                                    value={this.state.time5}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="nd5"
+                                    value={this.state.nd5}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="al5"
+                                    value={this.state.al5}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="na5"
+                                    value={this.state.na5}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="pr5"
+                                    value={this.state.pr5}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="remark5"
+                                    value={this.state.remark5}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row">
+                                6
+                                </th>
+                                <th><input
+                                    type="date"
+                                    className="form-control"
+                                    name="date_1"
+                                    value={this.state.date_1}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <th><input
+                                    type="time"
+                                    className="form-control"
+                                    name="time6"
+                                    value={this.state.time6}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="nd6"
+                                    value={this.state.nd6}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="al6"
+                                    value={this.state.al6}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="na6"
+                                    value={this.state.na6}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="pr6"
+                                    value={this.state.pr6}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="remark6"
+                                    value={this.state.remark6}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row">
+                                7
+                                </th>
+                                <th><input
+                                    type="date"
+                                    className="form-control"
+                                    name="date_1"
+                                    value={this.state.date_1}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <th><input
+                                    type="time"
+                                    className="form-control"
+                                    name="time7"
+                                    value={this.state.time7}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="nd7"
+                                    value={this.state.nd7}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="al7"
+                                    value={this.state.al7}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="na7"
+                                    value={this.state.na7}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="pr7"
+                                    value={this.state.pr7}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="remark7"
+                                    value={this.state.remark7}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row">
+                                8
+                                </th>
+                                <th><input
+                                    type="date"
+                                    className="form-control"
+                                    name="date_1"
+                                    value={this.state.date_1}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <th><input
+                                    type="time"
+                                    className="form-control"
+                                    name="time8"
+                                    value={this.state.time8}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="nd8"
+                                    value={this.state.nd8}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="al8"
+                                    value={this.state.al8}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="na8"
+                                    value={this.state.na8}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="pr8"
+                                    value={this.state.pr8}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="remark8"
+                                    value={this.state.remark8}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row">
+                                9
+                                </th>
+                                <th><input
+                                    type="date"
+                                    className="form-control"
+                                    name="date_1"
+                                    value={this.state.date_1}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <th><input
+                                    type="time"
+                                    className="form-control"
+                                    name="time9"
+                                    value={this.state.time9}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="nd9"
+                                    value={this.state.nd9}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="al9"
+                                    value={this.state.al9}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="na9"
+                                    value={this.state.na9}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="pr9"
+                                    value={this.state.pr9}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="remark9"
+                                    value={this.state.remark9}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row">
+                                10
+                                </th>
+                                <th><input
+                                    type="date"
+                                    className="form-control"
+                                    name="date_1"
+                                    value={this.state.date_1}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <th><input
+                                    type="time"
+                                    className="form-control"
+                                    name="time10"
+                                    value={this.state.time10}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="nd10"
+                                    value={this.state.nd10}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="al10"
+                                    value={this.state.al10}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="na10"
+                                    value={this.state.na10}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="pr10"
+                                    value={this.state.pr10}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="remark10"
+                                    value={this.state.remark10}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row">
+                                11
+                                </th>
+                                <th><input
+                                    type="date"
+                                    className="form-control"
+                                    name="date_1"
+                                    value={this.state.date_1}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <th><input
+                                    type="time"
+                                    className="form-control"
+                                    name="time11"
+                                    value={this.state.time11}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="nd11"
+                                    value={this.state.nd11}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="al11"
+                                    value={this.state.al11}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="na11"
+                                    value={this.state.na11}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="pr11"
+                                    value={this.state.pr11}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="remark11"
+                                    value={this.state.remark11}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row">
+                                12
+                                </th>
+                                <th><input
+                                    type="date"
+                                    className="form-control"
+                                    name="date_1"
+                                    value={this.state.date_1}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <th><input
+                                    type="time"
+                                    className="form-control"
+                                    name="time12"
+                                    value={this.state.time12}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="nd12"
+                                    value={this.state.nd12}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="al12"
+                                    value={this.state.al12}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="na12"
+                                    value={this.state.na12}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="pr12"
+                                    value={this.state.pr12}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="remark12"
+                                    value={this.state.remark12}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row">
+                                13
+                                </th>
+                                <th><input
+                                    type="date"
+                                    className="form-control"
+                                    name="date_1"
+                                    value={this.state.date_1}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <th><input
+                                    type="time"
+                                    className="form-control"
+                                    name="time13"
+                                    value={this.state.time13}
+                                    onChange={e => this.change(e)}
+                                  /></th>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="nd13"
+                                    value={this.state.nd13}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="al13"
+                                    value={this.state.al13}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="na13"
+                                    value={this.state.na13}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="pr13"
+                                    value={this.state.pr13}
+                                    onChange={e => this.change(e)}
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="remark13"
+                                    value={this.state.remark13}
+                                    onChange={e => this.change(e)}
+                                  />
+                                </td>
+                              </tr>
+                              {/* <tr>
+                              <td colSpan="8">
+                              <button
+                                type="button"
+                                className="btn btn-info custom-total-show-btn"
+                                onClick={this.totalshow.bind(this)}
+                              >
+                                Show Pan&nbsp;&nbsp;{" "}
+                                <i
+                                  class="fa fa-arrow-circle-right"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              </td>
+                              </tr> */}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </form>
+                    <hr />
+                  
+                   
+                  </div>
+                  {/*end test detail form */}
+                  {/*comment pto */}
+                  <div className="below-custom-form">
+                    <div className="row">
+                      <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <h3>More Details</h3>
+                        <hr />
+                        <br />
+                      </div>
+                    </div>
+                    <form className="custom-content-form">
+                      <div className="form-row">
+                        <div class="form-group col-md-12">
+                          <div class="form-group row">
+                            <label
+                              for="inputPassword"
+                              class="col-sm-2 col-form-label"
+                            >
+                              PTO's Comment
+                            </label>
+                            <div class="col-sm-10">
+                              <textarea
+                                class="form-control"
+                                id="inputPassword"
+                                name="pto_comment"
+                                value={this.state.pto_comment}
+                                onChange={e => this.change(e)}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <small>* This Fields are Mandatory . </small>
+                      <br />
+                      {sbmtbtn}
+                
+                {btnmsg}
+                </form>
+                 {/*modal experiment */}
+               {/* {showmodal} */}
+               
+              
+               <SuccessModal  
+               visible={this.state.visible}
+                    width={this.props.width}
+                    height={this.props.height}
+                    effect={this.props.effect}
+                    onClickAway={() => this.closeModal()} />
+                {/*end model experiment */}
+                  </div>
+                  {/*end comment pto */}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+    }
+export default RF21

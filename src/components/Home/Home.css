@@ -1,0 +1,26 @@
+/* .fixed-layout .page-wrapper {
+    padding-top: 0!important;
+} */
+
+.page-wrapper {
+  background: #f2f7f8 !important;
+}
+.rt-thead {
+  background-color: #34458a !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+.ReactTable {
+  position: relative !important;
+}
+
+/* .card {
+  background-color: #34458a;
+  color: white !important;
+}
+hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-top: 1px solid #fff;
+} */

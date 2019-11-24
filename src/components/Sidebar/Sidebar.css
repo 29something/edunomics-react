@@ -1,0 +1,25 @@
+.custom-scroll-sidebar-bg {
+    background: #fff!important;
+}
+.left-sidebar {
+    padding-top:65px!important;
+    overflow-y: scroll;
+}
+.scroll-sidebar {
+    height: calc(100% - 0%)!important;
+    position: relative;
+    /* height: auto!important; */
+}
+.sidebar-nav ul li .fa {
+    color: #8d97ad;
+}
+.sidebar-nav ul li ul {
+    padding-left: 15px;
+}
+/*********************************new css***************************/
+.nav-link[data-toggle].collapsed:after {
+    content: "";
+}
+.nav-link[data-toggle]:not(.collapsed):after {
+    content: "";
+}

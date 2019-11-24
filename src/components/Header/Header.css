@@ -1,0 +1,44 @@
+/* .custom-navbar-bg {
+    background: #343a40;
+} */
+.badge {
+  padding: 2px 6px;
+  position: absolute;
+  top: 11px;
+  right: 2px;
+  border-radius: 50%;
+  }
+.rdc-logo {
+  width: 189px;
+  height: auto;
+}
+.custom-topbar-bg {
+  background: #343a40 !important;
+}
+.custom-navbar-bg-here {
+  /* background: linear-gradient(to right, #0178bc 0%, #00bdda 100%)!important; */
+  background: #34458a;
+}
+.logout-btn {
+  margin-top: 20px;
+  background: #0178bc !important;
+  border: solid thin #0178bc;
+}
+.logout-btn:hover {
+  background: #fff !important;
+  color: #0178bc;
+  border: solid thin #fff !important;
+  transition: 0.5s;
+}
+.topbar .top-navbar .navbar-header {
+  background: #eee !important;
+  line-height: 65px;
+  padding-left: 10px;
+  min-width: 70px;
+}
+.navbar-dark .navbar-nav .nav-link {
+  color: rgba(190, 188, 201, 1);
+}
+.navbar-header > .navbar-brand > h3 {
+  text-align: center !important;
+}

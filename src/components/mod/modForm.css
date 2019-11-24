@@ -1,0 +1,110 @@
+.search-ul,
+.search-ul li {
+  width: 25rem;
+  cursor: default;
+}
+
+.search-ul {
+  z-index: 999 !important;
+  position: absolute;
+}
+
+.small-input {
+  width: 6rem !important;
+}
+
+.item-search-ul {
+  z-index: 999 !important;
+  position: absolute;
+  width: 6rem !important;
+  margin-left: 5rem !important;
+}
+
+.item-search-ul li {
+  cursor: default;
+}
+
+.autocomplete {
+  position: relative;
+  /* display: inline-block; */
+}
+
+input[type="text"] {
+  background-color: #f1f1f1;
+}
+
+.ReactTable {
+  position: absolute;
+}
+
+.ReactTable .rt-thead {
+  box-shadow: none;
+  background: #03a9f3;
+  color: #fff;
+}
+
+.ReactTable .rt-thead {
+  padding: 7px;
+}
+
+.ReactTable .-loading > div {
+  position: absolute;
+  display: block;
+  color: transparent !important;
+}
+
+.ReactTable .-loading {
+  display: block;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.8);
+  opacity: 0;
+  pointer-events: none;
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(100, 100, 100, 0.2);
+  border-radius: 50%;
+  border-top-color: rgba(100, 100, 100, 0.7);
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+  background-color: transparent !important;
+  left: 50% !important;
+  top: 50% !important;
+}
+
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+.ReactTable .rt-noData {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background: #03a9f3 !important;
+  transition: all 0.3s ease;
+  z-index: 1;
+  pointer-events: none;
+  padding: 5px !important;
+  color: #fff !important;
+  font-weight: 400;
+}
+
+.item-list-group {
+  max-height: 20rem;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: auto !important;
+}
+
+.item-list-listchild p,
+span {
+  font-size: 0.75rem !important;
+}
