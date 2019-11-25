@@ -7,7 +7,7 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 
 // const { API_KEY } = process.env
-const API_URL = "http://35.234.215.61/api/bom/";
+const API_URL = 'http://34.93.244.58/api/bom/';
 // const tokenvalue = 'eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjg5LCJyb2xlX2lkIjo1LCJwbGFudElkcyI6MzMsIm5hbWUiOiJHYW5lc2ggUGF3YXIiLCJpYXQiOjE1NjY0MTI2NDIsImV4cCI6MTU2NjU4NTQ0Mn0.ZxZAPDiZ_gi1OC307Lp_WA0rhFOVNro1wS6lctRD6iYlmQmuskKFoj7GSmSac6Qg'
 
 export class modRejected extends Component {

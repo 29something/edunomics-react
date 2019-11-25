@@ -7,7 +7,7 @@ import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 
 // const { API_KEY } = process.env
-const API_URL = 'http://35.234.215.61/api/bom/'
+const API_URL = 'http://34.93.244.58/api/bom/';
 // const tokenvalue = 'eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjg5LCJyb2xlX2lkIjo1LCJwbGFudElkcyI6MzMsIm5hbWUiOiJHYW5lc2ggUGF3YXIiLCJpYXQiOjE1NjY4ODQyMTgsImV4cCI6MTU2NzA1NzAxOH0.LMJysgF8_Hvy9a1xNLjPkrdtt0GwI_Wm3VCZmfVxpTP-PdClpIClVKieX4accwVe'
 
 export class modPending extends Component {

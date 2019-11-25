@@ -5,7 +5,9 @@ import './modForm.css'
 import axios from 'axios'
 import itemElement from './itemElement';
 
-const API_URL = 'http://35.234.215.61/api/bom/'
+
+const API_URL = 'http://34.93.244.58/api/bom/';
+
 
 export class modCreate extends Component {
 

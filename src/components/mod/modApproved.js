@@ -6,7 +6,9 @@ import axios from 'axios'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 
-const API_URL = 'http://35.234.215.61/api/bom/'
+
+const API_URL = 'http://34.93.244.58/api/bom/';
+
 
 export class modApproved extends Component {
   constructor(props) {

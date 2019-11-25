@@ -7,7 +7,8 @@ import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 
 // const { API_KEY } = process.env
-const API_URL = 'http://34.234.215.61/api/bom/'
+const API_URL = 'http://34.93.244.58/api/bom/';
+
 
 export class modUpdate extends Component {
 
@@ -75,7 +76,9 @@ export class modUpdate extends Component {
   async handleSearchInput(e) {
     this.state.targetid = e.target.id
     let suggestions = [], fgCodes = [], fgDescriptions = [], itemCodes = [], url, value = ''
-
+this.setState({
+  text: e.target.value
+})
     if (this.state.targetid === 'fgcodeIn') {
       url = API_URL + `search`
       value = this.search.value
