@@ -45,15 +45,28 @@ export class Audits extends Component {
       userdata: [],
       userCount: [],
       user:[],
-      ui_user_order_array: [{ 
-        s_t16 : "",
-        s_t17  :"",
-        s_t18 : ""
-       }],
+      // ui_user_order_array: [{ 
+      //   s_t16 : "",
+      //   s_t17  :"",
+      //   s_t18 : ""
+      //  }],
+      ui_user_order_array: [
+        {
+          assets_id: "",
+          asset_description: "",
+          asset_name: "",
+          asset_number: "",
+          audit_caliberation:"Unavailable",
+          date_today: "Unavailable",
+          date_past: "Unavailable",
+          date_next:"Unavailable" 
+        }
+      ]
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.validator = new SimpleReactValidator();
   }
+
   componentWillMount = () => {
     var today = new Date();
     var dd = today.getDate();
@@ -87,11 +100,30 @@ export class Audits extends Component {
       );
       console.log("userdata response", response.data);
      let Count=response.data.assetcountdata
+
+        function arrangeUiArray(data){
+          return data.map(d=>(
+             {
+              assets_id: d.assets_id, 
+              asset_description: d.asset_description,
+              asset_name: d.asset_name,
+              asset_number: d.asset_number, 
+              asset_make: d.asset_make, 
+              audit_caliberation: d.audit_caliberation || "Unavailable",
+              date_today: d.date_today || "Unavailable",
+              date_past: d.date_past || "Unavailable",
+              date_next: d.date_next || "Unavailable"
+            }
+          ))
+        }
       // console.log("userdata response", response.data.assetTypedata);
       if (response.data.success) {
        await this.setState({
           userdata: response.data.assetTypedata,
-        userCount:response.data.assetcountdata});
+          userCount:response.data.assetcountdata,
+          ui_user_order_array: arrangeUiArray(response.data.assetTypedata)
+        });
+        console.log(this.state.ui_user_order_array);
       //   this.setState({
       //     ui_user_order_array: this.state.ui_user_order_array.concat([{
       //  s_t16 : "",
@@ -139,14 +171,19 @@ export class Audits extends Component {
     }
   }
   manualchange  = (idx) => (e) => {
-    const newShareholders = this.state. ui_user_order_array.map((shareholder, sidx) => {
-      if (idx !== sidx) return shareholder;
-      return { ...shareholder, [e.target.name]: e.target.value };
-    // this.setState ({
-    //   [e.target.name]: e.target.value
-    // });
+    // const newShareholders = this.state. ui_user_order_array.map((shareholder, sidx) => {
+    //   if (idx !== sidx) return shareholder;
+    //   return { ...shareholder, [e.target.name]: e.target.value };
+    // })
+    // this.setState({  ui_user_order_array: newShareholders });
+    let target_name = e.target.name.split("-")[0];
+    this.state.ui_user_order_array[idx][target_name] = e.target.value;
+    
+    this.setState({
+      [e.target.name] :  e.target.value,
+      ui_user_order_array: [...this.state.ui_user_order_array]
     })
-    this.setState({  ui_user_order_array: newShareholders });
+    console.log(target_name, this.state.ui_user_order_array);
   };
   // handleAddShareholder = () => {
   //   this.setState({
@@ -178,49 +215,28 @@ export class Audits extends Component {
   };
   async onSubmit(event) {
     event.preventDefault();
-    console.log(this.state);
-    if (this.validator.allValid()) {
-      let tokenvalue = localStorage.getItem("token");
+    if(this.validator.allValid){
+      let rf1 = this.state.ui_user_order_array.map(d =>(
+        {
+          assets_id: d.assets_id, 
+          audit_caliberation: d.audit_caliberation, 
+          date_today: this.state.date.toString(), 
+          date_past: d.date_past, 
+          date_next: d.date_next
+        }
+      ))
       let body = {
-        supplier: this.state.supplier,
-        source: this.state.source,
-        plant: localStorage.getItem("plant_name"),
-        date: this.state.date,
-        s_t1: this.state.s_t1,
-        s_t2: this.state.s_t2,
-        s_t3: this.state.s_t3,
-        s_t4: this.state.s_t4,
-        s_t5: this.state.s_t5,
-        s_t6: this.state.s_t6,
-        s_t7: this.state.s_t7,
-        s_t8: this.state.s_t8,
-        s_t9: this.state.s_t9,
-        s_t10: this.state.s_t10,
-        s_t11: this.state.s_t11,
-        s_t12: this.state.s_t12,
-        s_t13: this.state.s_t13,
-        s_t14: this.state.s_t14,
-        s_t15: this.state.s_t15,
-        s_t16: this.state.s_t16,
-        s_t17: this.state.s_t17,
-        s_t18: this.state.s_t18,
-        s_t19: this.state.s_t19,
-        s_t20: this.state.s_t20,
-        s_t21: this.state.s_t21,
-        s_t22: this.state.s_t22,
-        s_t23: this.state.s_t23,
-        s_t24: this.state.s_t24,
-        rf_img: this.state.rf_img,
-        type: "RF_01"
-      };
-      console.log("body here", body);
-      this.openModal();
-      this.setState({
-        btnstatus : true
-      })
+        "type":"rf_01",
+        "comment":"its OK",
+        "agency_name": this.state.supplier, 
+        "agency_number": this.state.source,
+        "rf1": rf1
+      }
+      console.log(body);
       try {
+        let tokenvalue = localStorage.getItem("token");
         const response = await axios.post(
-          `${API_URL}rf_form/submit`,
+          `${API_URL}assets/rf_1`,
           body,
           (axios.defaults.headers.common["x-access-token"] = tokenvalue)
         );
@@ -236,11 +252,73 @@ export class Audits extends Component {
       } catch (error) {
         console.log(error);
       }
-    } else {
+    }else {
       this.validator.showMessages();
       // rerender to show messages for the first time
       this.forceUpdate();
     }
+    // if (this.validator.allValid()) {
+      // let tokenvalue = localStorage.getItem("token");
+    //   let body = {
+    //     supplier: this.state.supplier,
+    //     source: this.state.source,
+    //     plant: localStorage.getItem("plant_name"),
+    //     date: this.state.date,
+    //     s_t1: this.state.s_t1,
+    //     s_t2: this.state.s_t2,
+    //     s_t3: this.state.s_t3,
+    //     s_t4: this.state.s_t4,
+    //     s_t5: this.state.s_t5,
+    //     s_t6: this.state.s_t6,
+    //     s_t7: this.state.s_t7,
+    //     s_t8: this.state.s_t8,
+    //     s_t9: this.state.s_t9,
+    //     s_t10: this.state.s_t10,
+    //     s_t11: this.state.s_t11,
+    //     s_t12: this.state.s_t12,
+    //     s_t13: this.state.s_t13,
+    //     s_t14: this.state.s_t14,
+    //     s_t15: this.state.s_t15,
+    //     s_t16: this.state.s_t16,
+    //     s_t17: this.state.s_t17,
+    //     s_t18: this.state.s_t18,
+    //     s_t19: this.state.s_t19,
+    //     s_t20: this.state.s_t20,
+    //     s_t21: this.state.s_t21,
+    //     s_t22: this.state.s_t22,
+    //     s_t23: this.state.s_t23,
+    //     s_t24: this.state.s_t24,
+    //     rf_img: this.state.rf_img,
+    //     type: "RF_01"
+    //   };
+    //   console.log("body here", body);
+    //   this.openModal();
+    //   this.setState({
+    //     btnstatus : true
+    //   })
+      // try {
+      //   const response = await axios.post(
+      //     `${API_URL}rf_form/submit`,
+      //     body,
+      //     (axios.defaults.headers.common["x-access-token"] = tokenvalue)
+      //   );
+      //   console.log(response);
+      //   //   .then(console.log(this.state));
+
+      //   if (response.data.success) {
+      //     alert(response.data.msg);
+      //     //   this.props.history.push("/ViewTestEight");
+      //   } else {
+      //     alert(response.data.msg);
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      // }
+    // } else {
+    //   this.validator.showMessages();
+    //   // rerender to show messages for the first time
+    //   this.forceUpdate();
+    // }
   }
   totalshow = e => {
     e.preventDefault();
@@ -584,21 +662,20 @@ export class Audits extends Component {
                             {
                               this.state.userdata.length ? (
                               
-                                this.state.userdata
-                                  .map(function (item, id) {
-                                    return (
-                                      <React.Fragment>
-                                      {this.state.ui_user_order_array.map((shareholder, idx) => (
+                                    this.state.ui_user_order_array.map((shareholder, idx) => (
+                              <React.Fragment>
+
                                         <tr>
                               <th scope="row">
                                 <input
                                   type="text"
                                   className="form-control"
                                   name="s_t13"
-                                  value={item.asset_description}
+                                  value={shareholder.asset_description}
                                              
                                               disabled
                                 />
+                                <input type="text" name="asset_id" id="asset_id" value={shareholder.assets_id} disabled hidden/>
                               </th>
 
                               <td>
@@ -606,7 +683,7 @@ export class Audits extends Component {
                                   type="text"
                                   className="form-control"
                                   name="s_t14"
-                                  value={item.asset_number}
+                                  value={shareholder.asset_number}
                                              
                                               disabled
                                 />
@@ -617,7 +694,7 @@ export class Audits extends Component {
                                   type="text"
                                   className="form-control"
                                   name="s_t15"
-                                  value={item.asset_make}
+                                  value={shareholder.asset_make}
                                              
                                               disabled
                                 />
@@ -626,8 +703,9 @@ export class Audits extends Component {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  name="s_t16"
-                                  value={shareholder.s_t16}
+                                  name={"audit_caliberation-"+shareholder.assets_id}
+                                  
+                                  value={shareholder.audit_caliberation}
                                   onChange={this.manualchange(idx)}
                                 />
                               </td>
@@ -635,8 +713,8 @@ export class Audits extends Component {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  name="s_t17"
-                                  value={shareholder.s_t17}
+                                  name={"date_past-"+shareholder.assets_id}
+                                  value={shareholder.date_past}
                                   onChange={this.manualchange(idx)}
                                 />
                               </td>
@@ -644,17 +722,18 @@ export class Audits extends Component {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  name="s_t18"
-                                  value={shareholder.s_t18}
+                                  name={"date_next-"+shareholder.assets_id}
+                                  value={shareholder.date_next}
                                   onChange={this.manualchange(idx)}
                                 />
                                         </td>
                                         </tr>
-                                      ))}
-                                      </React.Fragment>
+                                  </React.Fragment>
+                                      ))):<React.Fragment></React.Fragment>}
                                       
+                            {/*                                       
                                     )
-                                  },this)):<React.Fragment></React.Fragment>}
+                                  },this)):<React.Fragment></React.Fragment>} */}
                             {/* <tr>
                               <th scope="row">
                                 <input
@@ -792,12 +871,12 @@ export class Audits extends Component {
                             Upload Image
                           </label>
                           <div class="col-sm-10">
-                            <input
+                            {/* <input
                               type="file"
                               name="rf_img"
                               value={this.state.rf_img}
                               onChange={e => this.change(e)}
-                            />
+                            /> */}
                           </div>
                         </div>
                       </div>
